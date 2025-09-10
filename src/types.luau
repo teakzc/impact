@@ -1,9 +1,19 @@
 --!strict
 --!optimize 2
 
-local block = require("./block")
+export type SpatialType = "Box" | "Radius"
 
-export type BlockHitbox = block.BlockHitbox
-export type BlockProperties = block.BlockProperties
+export type SpatialProperties = {
+    Center: CFrame? | Vector3?,
+    Size: Vector3?,
+    Radius: number?,
+    RelativeTo: CFrame?,
+    VelocityPrediction: boolean?,
+    Type: SpatialType
+}
+
+export type SpatialHitbox = typeof(
+    setmetatable({} :: SpatialProperties, {} :: {[string]: unknown})
+)
 
 return {}

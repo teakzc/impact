@@ -12,11 +12,11 @@ local function Register(Name: string, Params: OverlapParams | RaycastParams)
     ParamsRegistry[Name] = Params
 end
 
-export type BlockHitbox = types.BlockHitbox
-export type BlockProperties = types.BlockProperties
+export type SpatialHitbox = types.SpatialHitbox
+export type SpatialProperties = types.SpatialProperties
 
 return {
-    Block = require("@self/block"),
+    Spatial = require("@self/spatial"),
 
     Register = Register
 }
