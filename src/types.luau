@@ -3,17 +3,28 @@
 
 export type SpatialType = "Box" | "Radius"
 
-export type SpatialProperties = {
-    Center: CFrame? | Vector3?,
-    Size: Vector3?,
-    Radius: number?,
+export type BoxSpatialProperties = {
+    Center: CFrame,
+    Size: Vector3,
+    Type: "Box",
     RelativeTo: CFrame?,
     VelocityPrediction: boolean?,
-    Type: SpatialType
+    OverlapParams: OverlapParams
 }
 
-export type SpatialHitbox = typeof(
-    setmetatable({} :: SpatialProperties, {} :: {[string]: unknown})
-)
+export type RadiusSpatialProperties = {
+    Center: Vector3,
+    Radius: number,
+    Type: "Radius",
+    RelativeTo: CFrame?,
+    VelocityPrediction: boolean?,
+    OverlapParams: OverlapParams
+}
+
+export type bounds = {}
+
+export type BoxSpatialHitbox = BoxSpatialProperties & bounds
+
+export type RadiusSpatialHitbox = RadiusSpatialProperties & bounds
 
 return {}

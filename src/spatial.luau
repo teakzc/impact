@@ -1,12 +1,16 @@
 --!strict
---!native
 --!optimize 2
 
 local types = require("./types")
+local registry = require("./registry")
 
-type SpatialProperties = types.SpatialProperties
+type BoxSpatialProperties = types.BoxSpatialProperties
+type RadiusSpatialProperties = types.RadiusSpatialProperties
+
 type SpatialType = types.SpatialType
-type SpatialHitbox = types.SpatialHitbox
+
+type BoxSpatialHitbox = types.BoxSpatialHitbox
+type RadiusSpatialHitbox = types.RadiusSpatialHitbox
 
 local function merge(a, b)
     for i, v in b do
@@ -16,27 +20,33 @@ local function merge(a, b)
     return a
 end
 
-local DefaultProperties: {[SpatialType]: {[string]: unknown}} = {
+local DefaultProperties: {[SpatialType]: BoxSpatialProperties | RadiusSpatialProperties} = {
     Box = {
         Center = CFrame.new(),
         Size = Vector3.one,
+        Type = "Box",
     },
     Radius = {
         Center = Vector3.zero,
         Radius = 1,
+        Type = "Radius",
     }
 }
 
 local function Constructor(Type: SpatialType)
-    return function(Properties: SpatialProperties): SpatialHitbox
-        local self = setmetatable(
-            merge({
-                Center = CFrame.new(),
-                Size = Vector3.one,
-                Radius = 1,
-                Type = Type
-            } :: SpatialProperties, Properties), require("./solver/bounds")
-        )
+    return function(Properties: BoxSpatialProperties | RadiusSpatialProperties, OverlapParamsRegistryKey: string): BoxSpatialHitbox | RadiusSpatialHitbox
+        local self
+        local OverlapParams = registry.Access(OverlapParamsRegistryKey)
+
+        if OverlapParams ~= nil then
+            if typeof(OverlapParams) == "OverlapParams" then
+                OverlapParams = OverlapParams
+            else
+                error("Key does not access a OverlapParameter!")
+            end
+        end
+
+        self = merge(merge(merge(DefaultProperties[Type], Properties), require("./solver/bounds")), OverlapParams) :: BoxSpatialHitbox | RadiusSpatialHitbox
 
         return self
     end
