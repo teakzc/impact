@@ -1,23 +1,10 @@
 --!strict
 --!optimize 2
 
-export type ParamsRegistry = {[string]: OverlapParams | RaycastParams}
+local types = require("./types")
 
-local ParamsRegistry: ParamsRegistry = {}
+local registry: types.registry = {}
 
-local function Register(Name: string, Params: OverlapParams | RaycastParams)
-    ParamsRegistry[Name] = Params
+local function register(name: string, params: OverlapParams)
+    registry[name] = params
 end
-
-local function Access(Name: string): OverlapParams | RaycastParams
-    if ParamsRegistry[Name] then
-        return ParamsRegistry[Name]
-    else
-        error("Key is not registered, ".. Name)
-    end
-end
-
-return {
-    Register = Register,
-    Access = Access
-}
