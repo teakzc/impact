@@ -11,6 +11,9 @@ environment = "roblox"
 lib = "src/init.luau"
 build_files = ["src"]
 
+[engines]
+lune = "^0.8.9"
+
 [indices]
 default = "https://github.com/pesde-pkg/index"
 
@@ -24,3 +27,6 @@ sourcemap_generator = ".pesde/scripts/sourcemap_generator.luau"
 [dev_dependencies]
 scripts = { name = "pesde/scripts_rojo", version = "^0.1.1", target = "lune" }
 rojo = { name = "pesde/rojo", version = "^7.4.4", target = "lune" }
+
+[dependencies]
+lemonsignal = { wally = "data-oriented-house/lemonsignal", version = "^1.11.0" }
